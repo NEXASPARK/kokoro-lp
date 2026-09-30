@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>こころ ｜ だれでも使える やさしい おしゃべりAI</title>
+<meta name="description" content="はなしかけるだけで、やさしくお返事。文字を打たずに使える、シニアのための おしゃべりアプリ「こころ」。広告なし・登録なし。はじめの14日間は無料です。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="こころ ｜ だれでも使える やさしい おしゃべりAI">
+<meta property="og:description" content="はなしかけるだけで、やさしくお返事。シニアのための おしゃべりアプリです。">
+<meta property="og:image" content="https://nexaspark.github.io/kokoro-lp/assets/ogp.jpg">
+<meta property="og:url" content="https://nexaspark.github.io/kokoro-lp/">
+<meta property="og:site_name" content="こころ">
+<link rel="canonical" href="https://nexaspark.github.io/kokoro-lp/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: 白い便箋のように静かな一本道。縦書き明朝の章題が各章の左に立ち、本文は20px基準の横書きゴシックで読みやすく */
+:root {
+  --paper: #FFFFFF;       /* 白 */
+  --paper-2: #FFFFFF;
+  --surface: #FFFFFF;
+  --ink: #1E1B22;         /* ほぼ黒（わずかに紫みを含む） */
+  --ink-soft: #57525E;    /* 補助文（白地でコントラスト 7:1 以上） */
+  --rose: #A83A66;        /* 薄紅（アイコン上側を落ち着かせた色） */
+  --fuji: #6B58A3;        /* 藤色（アイコン下側を落ち着かせた色） */
+  --on-ink: #FFFFFF;
+  --line: rgba(30, 27, 34, .12);
+  --line-strong: rgba(30, 27, 34, .45);
+  --shadow: rgba(30, 27, 34, .10);
+
+  --font-mincho: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+
+  --fs-body: 1.25rem;     /* 20px */
+  --fs-small: 1.0625rem;  /* 17px */
+  --fs-h3: clamp(1.5rem, 3vw, 1.85rem);
+  --fs-h2: clamp(1.9rem, 4vw, 2.5rem);
+  --fs-hero: clamp(2.6rem, 6vw, 4.4rem);
+  --wrap: 1120px;
+  color-scheme: light;    /* 白地の一枚デザインに固定（ダークモードでも白） */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: var(--fs-body);
+  line-height: 1.9; letter-spacing: .04em;
+}
+img { max-width: 100%; display: block; }
+a { color: var(--rose); text-underline-offset: .25em; }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--rose); outline-offset: 5px; }
+h1, h2, h3 { font-family: var(--font-mincho); font-weight: 700; margin: 0; line-height: 1.5; text-wrap: balance; }
+p { margin: 0; }
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: 20px; }
+
+/* ---- header ---- */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 28px; }
+.brand { display: flex; align-items: center; gap: 14px; color: var(--ink); text-decoration: none; }
+.brand img { width: 40px; height: 40px; border-radius: 10px; }
+.brand span { font-family: var(--font-mincho); font-weight: 700; font-size: 1.5rem; letter-spacing: .3em; }
+.top nav { display: flex; gap: 28px; font-size: var(--fs-small); }
+.top nav a { color: var(--ink-soft); text-decoration: none; }
+.top nav a:hover { color: var(--rose); }
+
+/* ---- hero ---- */
+.hero-grid {
+  display: grid; align-items: center;
+  grid-template-columns: minmax(0, 290px) minmax(0, 1fr) auto;
+  grid-template-areas: "phone copy title";
+  gap: clamp(32px, 6vw, 88px);
+  padding-block: clamp(32px, 6vw, 72px) clamp(72px, 10vw, 128px);
+}
+.hero h1 {
+  grid-area: title; justify-self: end;
+  writing-mode: vertical-rl; text-orientation: mixed;
+  font-size: var(--fs-hero); font-weight: 600; line-height: 1.7; letter-spacing: .14em;
+}
+.hero h1 em { font-style: normal; color: var(--rose); }
+.hero-copy { grid-area: copy; display: grid; gap: 32px; min-width: 0; max-width: 30em; }
+.hero-lead { font-size: 1.375rem; line-height: 2; }
+.hero .phone { grid-area: phone; }
+
+.phone {
+  width: 100%; border-radius: 40px; overflow: hidden;
+  border: 1px solid var(--line-strong); padding: 8px; background: var(--surface);
+  box-shadow: 0 40px 80px -30px var(--shadow);
+}
+.phone img { width: 100%; height: auto; border-radius: 32px; aspect-ratio: 720 / 1564; }
+
+/* ---- store buttons ---- */
+.stores { display: flex; flex-wrap: wrap; gap: 14px; }
+.store {
+  display: inline-flex; align-items: center; gap: 14px; min-height: 64px;
+  padding: 10px 28px 10px 22px; border-radius: 6px;
+  background: var(--ink); color: var(--on-ink); text-decoration: none; line-height: 1.3;
+  transition: background-color .2s ease;
+}
+.store:hover { background: var(--rose); }
+.store:focus-visible { outline: 2px solid var(--rose); outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { .store { transition: none; } }
+.store svg { width: 26px; height: 26px; flex: none; }
+.store small { display: block; font-size: .8rem; opacity: .8; letter-spacing: .08em; }
+.store b { display: block; font-size: 1.25rem; font-weight: 700; letter-spacing: .04em; }
+.store-note { font-size: var(--fs-small); color: var(--ink-soft); }
+
+/* ---- chapter: 縦書きの章題 + 本文 ---- */
+.chapter { padding-block: clamp(80px, 11vw, 144px); border-top: 1px solid var(--line); }
+.chapter.tint { background: var(--paper-2); }
+.chapter-grid { display: grid; grid-template-columns: 5rem minmax(0, 1fr); gap: clamp(24px, 5vw, 72px); }
+.chapter-title {
+  writing-mode: vertical-rl; font-family: var(--font-mincho); font-weight: 600;
+  font-size: 1.5rem; letter-spacing: .32em; line-height: 1.5;
+  justify-self: center; align-self: start; padding-bottom: 30px; position: relative;
+}
+.chapter-title::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 1px; height: 20px; background: var(--rose); }
+.chapter-body { display: grid; gap: clamp(40px, 6vw, 64px); min-width: 0; }
+.chapter-lead { display: grid; gap: 16px; max-width: 36em; }
+.chapter-lead p { color: var(--ink-soft); }
+.chapter-h { font-size: var(--fs-h2); }
+
+/* ---- ある朝のおはなし（台本のような対話） ---- */
+.dialogue { display: grid; gap: clamp(28px, 4vw, 44px); max-width: 44em; }
+.line { display: grid; grid-template-columns: 5em minmax(0, 1fr); gap: 20px; align-items: baseline; }
+.line .who { font-family: var(--font-mincho); font-weight: 700; font-size: 1rem; letter-spacing: .3em; color: var(--ink-soft); }
+.line.kokoro .who { color: var(--rose); }
+.line q { font-family: var(--font-mincho); font-weight: 500; font-size: clamp(1.4rem, 3vw, 1.85rem); line-height: 1.85; quotes: "「" "」"; }
+.line.you q { color: var(--ink-soft); }
+.dialogue-note { font-size: var(--fs-small); color: var(--ink-soft); }
+
+/* ---- つかいかた（実際の手順） ---- */
+.steps, .promises { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line-strong); }
+.steps > li, .promises > li { display: grid; gap: 12px; align-content: start; padding: 32px 32px 8px 0; min-width: 0; }
+.steps > li + li, .promises > li + li { padding-left: 32px; border-left: 1px solid var(--line); }
+.step-num { font-family: var(--font-mincho); font-weight: 600; font-size: 1.1rem; color: var(--rose); }
+.steps h3 { font-size: var(--fs-h3); }
+.steps p, .promises span { color: var(--ink-soft); }
+.promises b { font-family: var(--font-mincho); font-weight: 700; font-size: var(--fs-h3); line-height: 1.5; }
+
+/* ---- 特長 ---- */
+.features { display: grid; gap: clamp(72px, 10vw, 120px); }
+.feature { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 270px); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.feature:nth-child(even) { grid-template-columns: minmax(0, 270px) minmax(0, 1fr); }
+.feature:nth-child(even) .phone { order: -1; }
+.feature-text { display: grid; gap: 20px; min-width: 0; max-width: 26em; }
+.kicker { font-family: var(--font-mincho); font-weight: 600; font-size: var(--fs-small); letter-spacing: .3em; color: var(--fuji); }
+.feature-text h3 { font-size: var(--fs-h2); line-height: 1.55; }
+.feature .phone { max-width: 270px; justify-self: center; }
+.sizes { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 28px; font-family: var(--font-mincho); font-weight: 600; border-top: 1px solid var(--line); padding-top: 18px; }
+.sizes span:nth-child(1) { font-size: 1.25rem; }
+.sizes span:nth-child(2) { font-size: 1.5rem; }
+.sizes span:nth-child(3) { font-size: 1.85rem; color: var(--rose); }
+
+/* ---- ご家族の方へ（手紙） ---- */
+.letter {
+  background: var(--surface); padding: clamp(28px, 6vw, 72px);
+  border: 1px solid var(--line); box-shadow: 0 30px 60px -40px var(--shadow);
+  display: grid; gap: 28px; max-width: 46em;
+}
+.letter ul { margin: 0; padding: 0; list-style: none; display: grid; }
+.letter li { padding-block: 16px; border-bottom: 1px dashed var(--line); padding-left: 1.8em; position: relative; }
+.letter li::before { content: "〇"; position: absolute; left: 0; top: 16px; color: var(--fuji); font-size: .9em; }
+.letter .sign { font-family: var(--font-mincho); color: var(--ink-soft); text-align: right; }
+
+/* ---- 料金 ---- */
+.price { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 80px); align-items: start; }
+.price-table { display: grid; border-top: 1px solid var(--line-strong); min-width: 0; }
+.price-row { display: grid; gap: 4px; padding-block: 24px; border-bottom: 1px solid var(--line); }
+.price-row .label { color: var(--ink-soft); font-size: var(--fs-small); }
+.price-row .value { font-family: var(--font-mincho); font-weight: 700; font-size: 2.4rem; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.price-row .value small { font-size: 1.05rem; font-weight: 600; margin-left: .4em; }
+.price-notes { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; min-width: 0; color: var(--ink-soft); }
+.price-notes li { padding-left: 1.2em; position: relative; }
+.price-notes li::before { content: "・"; position: absolute; left: 0; color: var(--rose); }
+
+/* ---- よくある質問 ---- */
+.faq { display: grid; border-top: 1px solid var(--line-strong); max-width: 48em; }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  cursor: pointer; list-style: none; position: relative; min-height: 64px;
+  padding: 22px 56px 22px 2.2em; font-family: var(--font-mincho); font-weight: 600; font-size: 1.3rem;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::before { content: "問"; position: absolute; left: 0; top: 22px; color: var(--rose); }
+.faq summary::after { content: "＋"; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: var(--ink-soft); font-family: var(--font-body); }
+.faq details[open] summary::after { content: "－"; }
+.faq .answer { padding: 0 0 26px 2.2em; color: var(--ink-soft); font-size: var(--fs-body); }
+
+/* ---- 結び ---- */
+.closing { padding-block: clamp(96px, 13vw, 168px); border-top: 1px solid var(--line); }
+.closing .wrap { display: grid; gap: 36px; justify-items: center; text-align: center; }
+.closing img { width: 80px; height: 80px; border-radius: 20px; }
+.closing h2 { font-size: var(--fs-h2); font-weight: 600; letter-spacing: .12em; }
+.closing .stores { justify-content: center; }
+
+footer { padding-block: 40px; font-size: var(--fs-small); color: var(--ink-soft); border-top: 1px solid var(--line); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px 32px; }
+footer nav { display: flex; flex-wrap: wrap; gap: 8px 28px; }
+footer a { color: var(--ink-soft); }
+
+/* ---- narrow ---- */
+@media (max-width: 900px) {
+  .top nav { display: none; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "copy" "phone"; }
+  .hero h1 { justify-self: center; font-size: clamp(2.1rem, 9vw, 3.2rem); }
+  .hero-copy { max-width: none; }
+  .hero .phone { max-width: 290px; justify-self: center; }
+  .chapter-grid { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .chapter-title { writing-mode: horizontal-tb; justify-self: start; font-size: 1.05rem; padding: 0 0 0 30px; }
+  .chapter-title::after { left: 0; top: 50%; bottom: auto; width: 20px; height: 1px; }
+  .steps, .promises { grid-template-columns: minmax(0, 1fr); }
+  .steps > li, .steps > li + li, .promises > li, .promises > li + li { padding: 26px 0; border-left: 0; }
+  .steps > li + li, .promises > li + li { border-top: 1px solid var(--line); }
+  .feature, .feature:nth-child(even) { grid-template-columns: minmax(0, 1fr); }
+  .feature:nth-child(even) .phone { order: 0; }
+  .feature .phone { max-width: 260px; }
+  .price { grid-template-columns: minmax(0, 1fr); }
+  .line { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+}
+@media (max-width: 480px) {
+  .store { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="top">
+      <a class="brand" href="#"><img src="assets/icon-192.png" alt="" width="40" height="40"><span>こころ</span></a>
+      <nav aria-label="ページ内のご案内">
+        <a href="#how">つかいかた</a>
+        <a href="#price">料金</a>
+        <a href="#faq">よくある質問</a>
+        <a href="#download">ダウンロード</a>
+      </nav>
+    </div>
+
+    <div class="hero-grid">
+      <h1>はなしかけるだけで、<br><em>やさしく お返事。</em></h1>
+
+      <div class="hero-copy">
+        <p class="hero-lead">「こころ」は、シニアのための おしゃべりアプリです。文字を打たなくても、声で話しかけるだけで、いつでも 話し相手になります。</p>
+        <div class="stores">
+          <a class="store" href="https://apps.apple.com/jp/app/id6793832711" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>
+            <span><small>iPhone・iPad の方</small><b>App Store</b></span>
+          </a>
+          <a class="store" href="https://play.google.com/store/apps/details?id=jp.nexaspark.kokoro" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9z"/></svg>
+            <span><small>Android の方</small><b>Google Play</b></span>
+          </a>
+        </div>
+        <p class="store-note">ダウンロードは無料です。はじめの14日間は、すべての機能を 無料で お使いいただけます。</p>
+      </div>
+
+      <div class="phone"><img src="assets/01-home.jpg" alt="こころの会話画面。吹き出しでお話が続き、下に大きな「はなす」ボタンがあります" width="720" height="1564"></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="chapter tint" aria-labelledby="morning-title">
+    <div class="wrap chapter-grid">
+      <p class="chapter-title" aria-hidden="true">ある朝の おはなし</p>
+      <div class="chapter-body">
+        <h2 id="morning-title" class="chapter-h">たとえば、こんなふうに。</h2>
+        <div class="dialogue">
+          <p class="line you"><span class="who">あなた</span><q>おはよう。きょうは あさがおが 三つ さいたよ</q></p>
+          <p class="line kokoro"><span class="who">こころ</span><q>おはようございます、はなこさん。あさがおが三つも咲いたのですね。毎日のお水やりのおかげですね。何色のお花でしたか？</q></p>
+          <p class="line you"><span class="who">あなた</span><q>むらさきと 白だよ。とても きれいだった</q></p>
+          <p class="line kokoro"><span class="who">こころ</span><q>むらさきと白、涼しげでいいですね。あしたはいくつ咲くか、楽しみですね。</q></p>
+        </div>
+        <p class="dialogue-note">話したことは 文字になって 画面にのこり、こころの お返事も 文字で とどきます。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="how" aria-labelledby="how-title">
+    <div class="wrap chapter-grid">
+      <p class="chapter-title" aria-hidden="true">つかいかた</p>
+      <div class="chapter-body">
+        <div class="chapter-lead">
+          <h2 id="how-title" class="chapter-h">むずかしい操作は ありません。</h2>
+          <p>ボタンは ひとつだけ。ふだん 人と話すように 話しかけてください。</p>
+        </div>
+        <ol class="steps">
+          <li><span class="step-num">一</span><h3>「はなす」を押す</h3><p>画面の下にある、大きなボタンを押します。</p></li>
+          <li><span class="step-num">二</span><h3>話しかける</h3><p>きょうの出来事、むかしの思い出、ちょっとした心配ごと。なんでも どうぞ。</p></li>
+          <li><span class="step-num">三</span><h3>お返事を読む</h3><p>こころの お返事が、吹き出しで 画面に とどきます。</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter tint" id="features" aria-labelledby="features-title">
+    <div class="wrap chapter-grid">
+      <p class="chapter-title" aria-hidden="true">こころの しごと</p>
+      <div class="chapter-body">
+        <h2 id="features-title" class="chapter-h">毎日の、おはなし相手に。</h2>
+        <div class="features">
+          <div class="feature">
+            <div class="feature-text">
+              <p class="kicker">おぼえる</p>
+              <h3>あなたのことを おぼえて、寄りそいます</h3>
+              <p>呼び名や、お住まいの地域、好きなこと、気をつけていること。教えてもらったことに合わせて、やさしく お返事します。</p>
+            </div>
+            <div class="phone"><img src="assets/03-profile.jpg" alt="「あなたのこと」の画面。呼び名や好きなことを登録できます" width="720" height="1564" loading="lazy"></div>
+          </div>
+          <div class="feature">
+            <div class="feature-text">
+              <p class="kicker">よみやすい</p>
+              <h3>文字は 大きく、読みやすく</h3>
+              <p>文字の大きさは 3つから えらべます。見本を見ながら、ちょうどいい大きさに できます。</p>
+              <p class="sizes" aria-label="文字の大きさ: ふつう、大きい、とても大きい"><span>ふつう</span><span>大きい</span><span>とても大きい</span></p>
+            </div>
+            <div class="phone"><img src="assets/07-home-xlarge.jpg" alt="文字を「とても大きい」にした会話画面" width="720" height="1564" loading="lazy"></div>
+          </div>
+          <div class="feature">
+            <div class="feature-text">
+              <p class="kicker">のこる</p>
+              <h3>思い出は、いつでも 読みかえせます</h3>
+              <p>これまでの お話は、お使いのスマートフォンの中にだけ 保存されます。読みかえすのも、消すのも、いつでも できます。</p>
+            </div>
+            <div class="phone"><img src="assets/05-history.jpg" alt="これまでのお話の一覧画面" width="720" height="1564" loading="lazy"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="safe" aria-labelledby="safe-title">
+    <div class="wrap chapter-grid">
+      <p class="chapter-title" aria-hidden="true">お約束</p>
+      <div class="chapter-body">
+        <h2 id="safe-title" class="chapter-h">あんしんして お使いいただくために。</h2>
+        <ul class="promises">
+          <li><b>広告は ありません</b><span>お話の とちゅうで 広告が出ることは ありません。</span></li>
+          <li><b>登録は いりません</b><span>メールアドレスや パスワードの 入力は 不要です。</span></li>
+          <li><b>お話は 外に のこりません</b><span>会話の内容は、お返事を作るためにだけ 使われます。外部に保存されることは ありません。</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter tint" id="family" aria-labelledby="family-title">
+    <div class="wrap chapter-grid">
+      <p class="chapter-title" aria-hidden="true">ご家族の方へ</p>
+      <div class="chapter-body">
+        <div class="letter">
+          <h2 id="family-title" class="chapter-h">はなれて暮らす ご両親の、話し相手に。</h2>
+          <p>スマートフォンの操作に 慣れていない方でも、ボタンひとつで お話しできるように つくりました。はじめの設定を、いっしょに してあげてください。</p>
+          <ul>
+            <li>はじめて開いたときに、使いかたを ていねいに ご案内します。</li>
+            <li>呼び名や 好きなことは、あとから 設定画面で 入力・変更できます。</li>
+            <li>文字の大きさも、見本を見ながら その場で 変えられます。</li>
+            <li>無料期間が 終わっても、自動で おしはらいが 始まることは ありません。</li>
+          </ul>
+          <p class="sign">こころ 制作チーム</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="price" aria-labelledby="price-title">
+    <div class="wrap chapter-grid">
+      <p class="chapter-title" aria-hidden="true">料金</p>
+      <div class="chapter-body">
+        <h2 id="price-title" class="chapter-h">まずは 14日間、無料で おためしください。</h2>
+        <div class="price">
+          <div class="price-table">
+            <div class="price-row"><span class="label">はじめの14日間</span><span class="value">無料</span></div>
+            <div class="price-row"><span class="label">その後も つづける場合（こころ 月額プラン）</span><span class="value">月々 1,000円<small>税込</small></span></div>
+          </div>
+          <ul class="price-notes">
+            <li>14日間の無料期間が 終わっても、自動で おしはらいは 始まりません。つづけたいときだけ、アプリの「ごりようプラン」から お申し込みください。</li>
+            <li>お申し込みの日から 月々1,000円の おしはらいが 始まり、ひと月ごとに 自動で つづきます。お支払いは App Store または Google Play の アカウントに 請求されます。</li>
+            <li>やめたいときは、いつでも かんたんに やめられます。更新日の24時間前までに、スマートフォンの サブスクリプション管理から 解約してください。</li>
+            <li>購読をやめても、これまでの お話は 消えません。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter tint" id="faq" aria-labelledby="faq-title">
+    <div class="wrap chapter-grid">
+      <p class="chapter-title" aria-hidden="true">よくある質問</p>
+      <div class="chapter-body">
+        <h2 id="faq-title" class="chapter-h">わからないことが あるときは。</h2>
+        <div class="faq">
+          <details><summary>文字を打つ必要は ありますか？</summary><p class="answer">ありません。「はなす」ボタンを押して 話しかけるだけで お使いいただけます。</p></details>
+          <details><summary>お返事は 声で 読み上げてくれますか？</summary><p class="answer">お返事は、画面に 文字で 表示します。文字の大きさは 3段階から えらべます。</p></details>
+          <details><summary>インターネットは 必要ですか？</summary><p class="answer">こころと お話しするときは、インターネットへの接続が 必要です。これまでの お話を 読みかえすことや、設定の変更は、つながっていなくても できます。</p></details>
+          <details><summary>どのスマートフォンで 使えますか？</summary><p class="answer">iPhone・iPad（iOS 17 以降）と、Android（Android 8.0 以降）で お使いいただけます。</p></details>
+          <details><summary>1日に 何回でも お話しできますか？</summary><p class="answer">1日 100回まで お話しできます。上限になったときは、日付が変わると また お話しできるようになります。</p></details>
+          <details><summary>機種を変えたら、どうなりますか？</summary><p class="answer">月額プランは、アプリの「ごりようプラン」にある「おしはらいを ひきつぐ」から、新しい機種でも そのまま お使いいただけます。お話の記録は 端末の中にだけ 保存しているため、新しい機種には 引き継がれません。</p></details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" id="download" aria-labelledby="closing-title">
+    <div class="wrap">
+      <img src="assets/icon-192.png" alt="" width="80" height="80">
+      <h2 id="closing-title">きょうから、こころと お話ししませんか。</h2>
+      <div class="stores">
+        <a class="store" href="https://apps.apple.com/jp/app/id6793832711" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>
+          <span><small>iPhone・iPad の方</small><b>App Store</b></span>
+        </a>
+        <a class="store" href="https://play.google.com/store/apps/details?id=jp.nexaspark.kokoro" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9z"/></svg>
+          <span><small>Android の方</small><b>Google Play</b></span>
+        </a>
+      </div>
+      <p class="store-note">ダウンロードは無料です</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <nav aria-label="ご案内">
+      <a href="https://nexaspark.github.io/kokoro-legal/support.html" target="_blank" rel="noopener">お問い合わせ</a>
+      <a href="https://nexaspark.github.io/kokoro-legal/terms.html" target="_blank" rel="noopener">利用規約</a>
+      <a href="https://nexaspark.github.io/kokoro-legal/privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>
+    </nav>
+    <p>© 2026 NEXASPARK</p>
+  </div>
+</footer>
+
+</body>
+</html>
